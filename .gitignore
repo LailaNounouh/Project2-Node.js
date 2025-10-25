@@ -1,0 +1,14 @@
+# Node modules
+node_modules/
+
+# SQLite database
+*.sqlite3
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Optional: macOS system files
+.DS_Store
