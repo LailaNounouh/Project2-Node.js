@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -8,23 +7,22 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
 async function createTables() {
-
     const hasUsers = await knex.schema.hasTable('users');
     if (!hasUsers) {
         await knex.schema.createTable('users', table => {
             table.increments('id').primary();
-            table.string('first_name').notNullable();
-            table.string('last_name').notNullable();
+            table.string('firstname').notNullable();
+            table.string('lastname').notNullable();
             table.string('email').notNullable().unique();
             table.integer('age').notNullable();
+            table.string('role').notNullable().defaultTo('user');
+            table.timestamp('created_at').defaultTo(knex.fn.now());
         });
-        console.log("Users table created!");
+        console.log('Users table created');
     } else {
-        console.log("Users table already exists");
+        console.log('Users table already exists');
     }
-
 
     const hasPosts = await knex.schema.hasTable('posts');
     if (!hasPosts) {
@@ -32,15 +30,14 @@ async function createTables() {
             table.increments('id').primary();
             table.string('title').notNullable();
             table.text('content').notNullable();
-            table.integer('user_id').unsigned().references('id').inTable('users');
+            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
             table.timestamp('created_at').defaultTo(knex.fn.now());
         });
-        console.log("Posts table created!");
+        console.log('Posts table created');
     } else {
-        console.log("Posts table already exists");
+        console.log('Posts table already exists');
     }
 }
-
 
 createTables()
     .then(() => {
@@ -62,11 +59,10 @@ createTables()
       `);
         });
 
-
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
     })
     .catch(err => {
-        console.error("Error creating tables:", err);
+        console.error('Error creating tables:', err);
         process.exit(1);
     });
