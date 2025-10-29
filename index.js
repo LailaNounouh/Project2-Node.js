@@ -59,6 +59,12 @@ createTables()
       `);
         });
 
+
+        const userRoutes = require('./routes/userRoutes');
+        const postRoutes = require('./routes/postRoutes');
+        app.use('/users', userRoutes);
+        app.use('/posts', postRoutes);
+
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
     })
