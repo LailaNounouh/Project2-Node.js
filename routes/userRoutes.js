@@ -1,11 +1,13 @@
 const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/userController');
+const ctrl = require('../controllers/userController');
+const { parsePagination, validateUserCreate, validateUserUpdate } = require('../middleware/validation');
 
-router.get('/', userController.getAllUsers);
-router.get('/:id', userController.getUserById);
-router.post('/', userController.createUser);
-router.put('/:id', userController.updateUser);
-router.delete('/:id', userController.deleteUser);
+const router = express.Router();
+
+router.get('/', parsePagination, ctrl.getAll);
+router.get('/:id', ctrl.getOne);
+router.post('/', validateUserCreate, ctrl.create);
+router.put('/:id', validateUserUpdate, ctrl.update);
+router.delete('/:id', ctrl.remove);
 
 module.exports = router;
