@@ -8,8 +8,7 @@ async function list({ search, limit, offset }) {
     let q = baseQuery();
     if (search) {
         q = q.where(function () {
-            this.where('title', 'like', `%${search}%`)
-                .orWhere('content', 'like', `%${search}%`);
+            this.where('title', 'like', `%${search}%`).orWhere('content', 'like', `%${search}%`);
         });
     }
     if (limit !== undefined) q = q.limit(limit);

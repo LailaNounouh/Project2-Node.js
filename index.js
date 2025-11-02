@@ -19,9 +19,6 @@ async function createTables() {
             table.string('role').notNullable().defaultTo('user');
             table.timestamp('created_at').defaultTo(knex.fn.now());
         });
-        console.log('Users table created');
-    } else {
-        console.log('Users table already exists');
     }
 
     const hasPosts = await knex.schema.hasTable('posts');
@@ -33,9 +30,6 @@ async function createTables() {
             table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
             table.timestamp('created_at').defaultTo(knex.fn.now());
         });
-        console.log('Posts table created');
-    } else {
-        console.log('Posts table already exists');
     }
 }
 
@@ -59,7 +53,6 @@ createTables()
       `);
         });
 
-
         const userRoutes = require('./routes/userRoutes');
         const postRoutes = require('./routes/postRoutes');
         app.use('/users', userRoutes);
@@ -72,3 +65,4 @@ createTables()
         console.error('Error creating tables:', err);
         process.exit(1);
     });
+
