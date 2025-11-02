@@ -19,7 +19,20 @@ async function createTables() {
             table.string('role').notNullable().defaultTo('user');
             table.timestamp('created_at').defaultTo(knex.fn.now());
         });
+        console.log("Users table created!");
     }
+
+
+    const hasCategories = await knex.schema.hasTable('categories');
+    if (!hasCategories) {
+        await knex.schema.createTable('categories', table => {
+            table.increments('id').primary();
+            table.string('name').notNullable().unique();
+            table.text('description');
+        });
+        console.log("Categories table created!");
+    }
+
 
     const hasPosts = await knex.schema.hasTable('posts');
     if (!hasPosts) {
@@ -27,9 +40,21 @@ async function createTables() {
             table.increments('id').primary();
             table.string('title').notNullable();
             table.text('content').notNullable();
-            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
+            table
+                .integer('user_id')
+                .unsigned()
+                .references('id')
+                .inTable('users')
+                .onDelete('CASCADE');
+            table
+                .integer('category_id')
+                .unsigned()
+                .references('id')
+                .inTable('categories')
+                .onDelete('SET NULL');
             table.timestamp('created_at').defaultTo(knex.fn.now());
         });
+        console.log("Posts table created!");
     }
 }
 
@@ -65,4 +90,3 @@ createTables()
         console.error('Error creating tables:', err);
         process.exit(1);
     });
-
