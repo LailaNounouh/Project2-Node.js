@@ -98,7 +98,6 @@ async function validatePostCreate(req, res, next) {
 function validatePostUpdate(req, res, next) {
     const { title, content, user_id } = req.body;
 
-    // ✅ STAP 3.1 — B) min-lengtes afdwingen bij update
     if (title !== undefined && (typeof title !== 'string' || title.trim().length < 3)) {
         return res.status(400).json({
             error: 'Invalid title',
@@ -123,10 +122,37 @@ function validatePostUpdate(req, res, next) {
     next();
 }
 
+/* ✅ STAP 3.2 — Category validatie */
+
+function categoryNameIsValid(name) {
+    return typeof name === 'string' && /^[A-Za-zÀ-ÖØ-öø-ÿ' -]{2,}$/.test(name.trim());
+}
+
+function validateCategoryCreate(req, res, next) {
+    const { name } = req.body;
+    if (!name) {
+        return res.status(400).json({ error: 'Missing fields', details: 'name is required' });
+    }
+    if (!categoryNameIsValid(name)) {
+        return res.status(400).json({ error: 'Invalid name', details: 'name cannot contain numbers' });
+    }
+    next();
+}
+
+function validateCategoryUpdate(req, res, next) {
+    const { name } = req.body;
+    if (name !== undefined && !categoryNameIsValid(name)) {
+        return res.status(400).json({ error: 'Invalid name', details: 'name cannot contain numbers' });
+    }
+    next();
+}
+
 module.exports = {
     parsePagination,
     validateUserCreate,
     validateUserUpdate,
     validatePostCreate,
-    validatePostUpdate
+    validatePostUpdate,
+    validateCategoryCreate,
+    validateCategoryUpdate
 };
