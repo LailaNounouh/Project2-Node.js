@@ -207,6 +207,29 @@ createTables()
         app.use('/posts', postRoutes);
         app.use('/categories', categoryRoutes);
 
+        // ✅ STAP 2.1 — Stats route
+        app.get('/stats', async (req, res) => {
+            try {
+                const usersRow = await knex('users').count({ count: '*' }).first();
+                const postsRow = await knex('posts').count({ count: '*' }).first();
+
+                let categoriesCount = 0;
+                const hasCategories = await knex.schema.hasTable('categories');
+                if (hasCategories) {
+                    const categoriesRow = await knex('categories').count({ count: '*' }).first();
+                    categoriesCount = Number(categoriesRow.count || 0);
+                }
+
+                res.json({
+                    users: Number(usersRow.count || 0),
+                    posts: Number(postsRow.count || 0),
+                    categories: categoriesCount
+                });
+            } catch (e) {
+                res.status(500).json({ error: 'Failed to load stats', details: e.message });
+            }
+        });
+
         const PORT = process.env.PORT || 3000;
         app.listen(PORT, () =>
             console.log(`Server running on http://localhost:${PORT}`)
