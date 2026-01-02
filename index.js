@@ -22,7 +22,6 @@ async function createTables() {
         console.log("Users table created!");
     }
 
-
     const hasCategories = await knex.schema.hasTable('categories');
     if (!hasCategories) {
         await knex.schema.createTable('categories', table => {
@@ -32,7 +31,6 @@ async function createTables() {
         });
         console.log("Categories table created!");
     }
-
 
     const hasPosts = await knex.schema.hasTable('posts');
     if (!hasPosts) {
@@ -60,31 +58,63 @@ async function createTables() {
 
 createTables()
     .then(() => {
+
+        // ✅ STAP 1 — Startpagina met 2 knoppen (/)
         app.get('/', (req, res) => {
             res.send(`
-        <h1>BeautyConnect API</h1>
-        <ul>
-          <li>GET /users</li>
-          <li>POST /users</li>
-          <li>GET /users/:id</li>
-          <li>PUT /users/:id</li>
-          <li>DELETE /users/:id</li>
-          <li>GET /posts</li>
-          <li>POST /posts</li>
-          <li>GET /posts/:id</li>
-          <li>PUT /posts/:id</li>
-          <li>DELETE /posts/:id</li>
-        </ul>
-      `);
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>BeautyConnect API</title>
+                    <style>
+                        body {
+                            font-family: Arial;
+                            background: #f5f5f5;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                        }
+                        .box {
+                            background: white;
+                            padding: 40px;
+                            border-radius: 8px;
+                            text-align: center;
+                            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                        }
+                        button {
+                            padding: 12px 20px;
+                            margin: 10px;
+                            font-size: 16px;
+                            cursor: pointer;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="box">
+                        <h1>BeautyConnect API</h1>
+                        <p>Select an option</p>
+                        <button onclick="location.href='/docs'">API Documentation</button>
+                        <button onclick="location.href='/tester'">API Tester</button>
+                    </div>
+                </body>
+                </html>
+            `);
         });
 
+        // ✅ Routes
         const userRoutes = require('./routes/userRoutes');
         const postRoutes = require('./routes/postRoutes');
+        const categoryRoutes = require('./routes/categoryRoutes');
+
         app.use('/users', userRoutes);
         app.use('/posts', postRoutes);
+        app.use('/categories', categoryRoutes);
 
         const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+        app.listen(PORT, () =>
+            console.log(`Server running on http://localhost:${PORT}`)
+        );
     })
     .catch(err => {
         console.error('Error creating tables:', err);
