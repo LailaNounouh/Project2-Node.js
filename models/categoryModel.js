@@ -4,9 +4,16 @@ function baseQuery() {
     return knex('categories').select('id', 'name', 'description');
 }
 
-async function list() {
-    return baseQuery();
+async function list({ sort, order } = {}) {
+  let q = baseQuery();
+  const allowedSort = ['id', 'name'];
+  if (sort && allowedSort.includes(sort)) {
+    const direction = order === 'desc' ? 'desc' : 'asc';
+    q = q.orderBy(sort, direction);
+  }
+  return q;
 }
+
 
 async function findById(id) {
     return baseQuery().where({ id }).first();

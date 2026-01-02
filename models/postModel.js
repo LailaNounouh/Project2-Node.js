@@ -4,7 +4,7 @@ function baseQuery() {
     return knex('posts').select('id', 'title', 'content', 'user_id', 'created_at');
 }
 
-async function list({ search, limit, offset }) {
+async function list({ search, limit, offset, sort, order }) {
     let q = baseQuery();
     if (search) {
         q = q.where(function () {
@@ -13,6 +13,12 @@ async function list({ search, limit, offset }) {
     }
     if (limit !== undefined) q = q.limit(limit);
     if (offset !== undefined) q = q.offset(offset);
+    const allowedSort = ['id', 'title', 'user_id', 'category_id', 'created_at'];
+if (sort && allowedSort.includes(sort)) {
+  const direction = order === 'desc' ? 'desc' : 'asc';
+  q = q.orderBy(sort, direction);
+}
+
     return q;
 }
 
