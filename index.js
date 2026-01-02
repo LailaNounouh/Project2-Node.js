@@ -102,6 +102,54 @@ createTables()
             `);
         });
 
+        // 🟢 STAP 2 — API documentatie pagina (/docs)
+        app.get('/docs', (req, res) => {
+            res.send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>API Documentation</title>
+                    <style>
+                        body { font-family: Arial; padding: 40px; }
+                        h2 { margin-top: 30px; }
+                    </style>
+                </head>
+                <body>
+                    <h1>BeautyConnect API – Documentation</h1>
+
+                    <h2>Users</h2>
+                    <ul>
+                        <li>GET /users</li>
+                        <li>GET /users/:id</li>
+                        <li>POST /users</li>
+                        <li>PUT /users/:id</li>
+                        <li>DELETE /users/:id</li>
+                    </ul>
+
+                    <h2>Posts</h2>
+                    <ul>
+                        <li>GET /posts</li>
+                        <li>GET /posts/:id</li>
+                        <li>POST /posts</li>
+                        <li>PUT /posts/:id</li>
+                        <li>DELETE /posts/:id</li>
+                    </ul>
+
+                    <h2>Categories</h2>
+                    <ul>
+                        <li>GET /categories</li>
+                        <li>GET /categories/:id</li>
+                        <li>POST /categories</li>
+                        <li>PUT /categories/:id</li>
+                        <li>DELETE /categories/:id</li>
+                    </ul>
+
+                    <p><a href="/">← Back</a></p>
+                </body>
+                </html>
+            `);
+        });
+
         // ✅ Routes
         const userRoutes = require('./routes/userRoutes');
         const postRoutes = require('./routes/postRoutes');
