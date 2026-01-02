@@ -73,6 +73,22 @@ async function validatePostCreate(req, res, next) {
     if (!title || !content || user_id === undefined) {
         return res.status(400).json({ error: 'Missing fields' });
     }
+
+    // ✅ STAP 3.1 — extra validatie
+    if (typeof title !== 'string' || title.trim().length < 3) {
+        return res.status(400).json({
+            error: 'Invalid title',
+            details: 'title must be at least 3 characters'
+        });
+    }
+
+    if (typeof content !== 'string' || content.trim().length < 10) {
+        return res.status(400).json({
+            error: 'Invalid content',
+            details: 'content must be at least 10 characters'
+        });
+    }
+
     const uid = parseInt(user_id, 10);
     if (Number.isNaN(uid)) return res.status(400).json({ error: 'Invalid user_id' });
     if (!(await userExists(uid))) return res.status(400).json({ error: 'User not found' });
@@ -98,4 +114,10 @@ function validatePostUpdate(req, res, next) {
     next();
 }
 
-module.exports = { parsePagination, validateUserCreate, validateUserUpdate, validatePostCreate, validatePostUpdate };
+module.exports = {
+    parsePagination,
+    validateUserCreate,
+    validateUserUpdate,
+    validatePostCreate,
+    validatePostUpdate
+};
