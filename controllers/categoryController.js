@@ -2,7 +2,8 @@ const Categories = require('../models/categoryModel');
 
 async function getAll(req, res) {
     try {
-        const rows = await Categories.list();
+       const { sort, order } = req.query;
+const rows = await Categories.list({ sort, order });
         res.json(rows);
     } catch (e) {
         res.status(500).json({ error: 'Failed to fetch categories', details: e.message });

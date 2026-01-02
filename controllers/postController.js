@@ -3,9 +3,9 @@ const Users = require('../models/userModel');
 
 async function getAll(req, res) {
     try {
-        const { search } = req.query;
-        const { limit, offset } = req.pagination || {};
-        const rows = await Posts.list({ search, limit, offset });
+      const { search, sort, order } = req.query;
+const { limit, offset } = req.pagination || {};
+const rows = await Posts.list({ search, limit, offset, sort, order });
         res.json(rows);
     } catch (e) {
         res.status(500).json({ error: 'Failed to fetch posts', details: e.message });
