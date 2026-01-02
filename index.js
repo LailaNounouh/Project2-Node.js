@@ -150,6 +150,54 @@ createTables()
             `);
         });
 
+        // 🔥 STAP 3 — API Tester pagina (/tester)
+        app.get('/tester', (req, res) => {
+            res.send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>API Tester</title>
+                    <style>
+                        body { font-family: Arial; padding: 40px; }
+                        button { margin: 5px; padding: 10px; }
+                        pre {
+                            background: #eee;
+                            padding: 20px;
+                            margin-top: 20px;
+                            max-height: 400px;
+                            overflow: auto;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>API Tester</h1>
+
+                    <button onclick="testApi('/users')">Test Users</button>
+                    <button onclick="testApi('/posts')">Test Posts</button>
+                    <button onclick="testApi('/categories')">Test Categories</button>
+
+                    <pre id="output">Click a button to test the API</pre>
+
+                    <p><a href="/">← Back</a></p>
+
+                    <script>
+                        function testApi(endpoint) {
+                            fetch(endpoint)
+                                .then(res => res.json())
+                                .then(data => {
+                                    document.getElementById('output').textContent =
+                                        JSON.stringify(data, null, 2);
+                                })
+                                .catch(err => {
+                                    document.getElementById('output').textContent = err;
+                                });
+                        }
+                    </script>
+                </body>
+                </html>
+            `);
+        });
+
         // ✅ Routes
         const userRoutes = require('./routes/userRoutes');
         const postRoutes = require('./routes/postRoutes');
