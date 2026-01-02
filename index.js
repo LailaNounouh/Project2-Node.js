@@ -59,7 +59,7 @@ async function createTables() {
 createTables()
     .then(() => {
 
-        // ✅ STAP 1 — Startpagina met 2 knoppen (/)
+        
         app.get('/', (req, res) => {
             res.send(`
                 <!DOCTYPE html>
@@ -102,7 +102,7 @@ createTables()
             `);
         });
 
-        // 🟢 STAP 2 — API documentatie pagina (/docs)
+        
         app.get('/docs', (req, res) => {
             res.send(`
                 <!DOCTYPE html>
@@ -142,6 +142,7 @@ createTables()
                         <li>POST /categories</li>
                         <li>PUT /categories/:id</li>
                         <li>DELETE /categories/:id</li>
+                        <li>GET /stats</li>
                     </ul>
 
                     <p><a href="/">← Back</a></p>
@@ -150,7 +151,7 @@ createTables()
             `);
         });
 
-        // 🔥 STAP 3 — API Tester pagina (/tester)
+        
         app.get('/tester', (req, res) => {
             res.send(`
                 <!DOCTYPE html>
