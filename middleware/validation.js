@@ -74,7 +74,6 @@ async function validatePostCreate(req, res, next) {
         return res.status(400).json({ error: 'Missing fields' });
     }
 
-    // ✅ STAP 3.1 — extra validatie
     if (typeof title !== 'string' || title.trim().length < 3) {
         return res.status(400).json({
             error: 'Invalid title',
@@ -98,12 +97,22 @@ async function validatePostCreate(req, res, next) {
 
 function validatePostUpdate(req, res, next) {
     const { title, content, user_id } = req.body;
-    if (title !== undefined && (typeof title !== 'string' || title.trim().length < 2)) {
-        return res.status(400).json({ error: 'Invalid title' });
+
+    // ✅ STAP 3.1 — B) min-lengtes afdwingen bij update
+    if (title !== undefined && (typeof title !== 'string' || title.trim().length < 3)) {
+        return res.status(400).json({
+            error: 'Invalid title',
+            details: 'title must be at least 3 characters'
+        });
     }
-    if (content !== undefined && (typeof content !== 'string' || content.trim().length < 2)) {
-        return res.status(400).json({ error: 'Invalid content' });
+
+    if (content !== undefined && (typeof content !== 'string' || content.trim().length < 10)) {
+        return res.status(400).json({
+            error: 'Invalid content',
+            details: 'content must be at least 10 characters'
+        });
     }
+
     if (user_id !== undefined) {
         const uid = parseInt(user_id, 10);
         if (Number.isNaN(uid)) {
