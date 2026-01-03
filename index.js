@@ -149,7 +149,7 @@ createTables()
             `);
         });
 
-        // ✅ STAP 1.1 — Verbeterde API Tester (volledig vervangen)
+        // ✅ API Tester
         app.get('/tester', (req, res) => {
             res.send(`
 <!DOCTYPE html>
@@ -200,22 +200,46 @@ function fetchApi(endpoint) {
     });
 }
 
+// 🔁 VERVANGEN seedUsers()
 function seedUsers() {
+  const timestamp = Date.now();
+
   const users = [
-    { firstname: 'Laila', lastname: 'Nounouh', email: 'laila@example.com', age: 22, role: 'admin' },
-    { firstname: 'Mona', lastname: 'Test', email: 'mona@test.com', age: 25, role: 'user' },
-    { firstname: 'Sara', lastname: 'Beauty', email: 'sara@beauty.com', age: 19, role: 'user' }
+    {
+      firstname: 'Demo',
+      lastname: 'Admin',
+      email: \`admin_\${timestamp}@demo.com\`,
+      age: 30,
+      role: 'admin'
+    },
+    {
+      firstname: 'Demo',
+      lastname: 'User',
+      email: \`user_\${timestamp}@demo.com\`,
+      age: 24,
+      role: 'user'
+    },
+    {
+      firstname: 'Beauty',
+      lastname: 'Tester',
+      email: \`tester_\${timestamp}@demo.com\`,
+      age: 19,
+      role: 'user'
+    }
   ];
 
-  users.forEach(u => {
-    fetch('/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(u)
-    });
+  Promise.all(
+    users.map(u =>
+      fetch('/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(u)
+      }).then(res => res.json())
+    )
+  ).then(results => {
+    document.getElementById('output').textContent =
+      JSON.stringify(results, null, 2);
   });
-
-  document.getElementById('output').textContent = 'Demo users added';
 }
 
 function seedPosts() {
