@@ -3,6 +3,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const knex = require('./database/knex');
 
+
+const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -36,8 +41,16 @@ async function createTables() {
             table.increments('id').primary();
             table.string('title').notNullable();
             table.text('content').notNullable();
-            table.integer('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE');
-            table.integer('category_id').unsigned().references('id').inTable('categories').onDelete('SET NULL');
+            table.integer('user_id')
+                .unsigned()
+                .references('id')
+                .inTable('users')
+                .onDelete('CASCADE');
+            table.integer('category_id')
+                .unsigned()
+                .references('id')
+                .inTable('categories')
+                .onDelete('SET NULL');
             table.timestamp('created_at').defaultTo(knex.fn.now());
         });
     }
@@ -45,26 +58,96 @@ async function createTables() {
 
 createTables().then(() => {
 
+    
+    app.use('/users', userRoutes);
+    app.use('/posts', postRoutes);
+    app.use('/categories', categoryRoutes);
+
+    
+    app.get('/stats', async (req, res) => {
+        try {
+            const users = await knex('users').count({ count: '*' }).first();
+            const posts = await knex('posts').count({ count: '*' }).first();
+            const categories = await knex('categories').count({ count: '*' }).first();
+
+            res.json({
+                users: Number(users.count),
+                posts: Number(posts.count),
+                categories: Number(categories.count)
+            });
+        } catch (err) {
+            res.status(500).json({ error: 'Failed to load stats' });
+        }
+    });
+
+    
+    app.get('/', (req, res) => {
+        res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BeautyConnect API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background: #6c63ff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #574fe0;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>BeautyConnect API</h1>
+    <p>Select an option</p>
+    <button onclick="location.href='/tester'">API Tester</button>
+    <button onclick="location.href='/users'">View Users (JSON)</button>
+    <button onclick="location.href='/posts'">View Posts (JSON)</button>
+  </div>
+</body>
+</html>
+        `);
+    });
+
+   
     app.get('/tester', (req, res) => {
         res.send(`
 <!DOCTYPE html>
 <html>
 <head>
   <title>API Tester</title>
-
-  <!-- ✅ VERVANGEN STYLE -->
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f6fb;
       padding: 40px;
     }
-
     h1 {
       text-align: center;
       margin-bottom: 40px;
     }
-
     .section {
       background: white;
       padding: 20px;
@@ -72,11 +155,7 @@ createTables().then(() => {
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
-
-    h2 {
-      margin-top: 0;
-    }
-
+    h2 { margin-top: 0; }
     button {
       padding: 10px 14px;
       margin: 5px 5px 5px 0;
@@ -86,11 +165,7 @@ createTables().then(() => {
       color: white;
       cursor: pointer;
     }
-
-    button:hover {
-      background: #574fe0;
-    }
-
+    button:hover { background: #574fe0; }
     pre {
       background: #111;
       color: #0f0;
@@ -99,7 +174,6 @@ createTables().then(() => {
       max-height: 350px;
       overflow: auto;
     }
-
     a {
       display: inline-block;
       margin-top: 20px;
@@ -143,7 +217,6 @@ createTables().then(() => {
 </div>
 
 <pre id="output">Click a button to test the API</pre>
-
 <a href="/">← Back</a>
 
 <script>
@@ -211,5 +284,7 @@ function testValidation() {
     });
 
     const PORT = 3000;
-    app.listen(PORT, () => console.log('Server running on http://localhost:' + PORT));
+    app.listen(PORT, () =>
+        console.log('Server running on http://localhost:' + PORT)
+    );
 });
