@@ -59,143 +59,198 @@ async function createTables() {
 createTables()
     .then(() => {
 
-        
         app.get('/', (req, res) => {
             res.send(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>BeautyConnect API</title>
-                    <style>
-                        body {
-                            font-family: Arial;
-                            background: #f5f5f5;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 100vh;
-                        }
-                        .box {
-                            background: white;
-                            padding: 40px;
-                            border-radius: 8px;
-                            text-align: center;
-                            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-                        }
-                        button {
-                            padding: 12px 20px;
-                            margin: 10px;
-                            font-size: 16px;
-                            cursor: pointer;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="box">
-                        <h1>BeautyConnect API</h1>
-                        <p>Select an option</p>
-                        <button onclick="location.href='/docs'">API Documentation</button>
-                        <button onclick="location.href='/tester'">API Tester</button>
-                    </div>
-                </body>
-                </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BeautyConnect API</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>BeautyConnect API</h1>
+    <p>Select an option</p>
+    <button onclick="location.href='/docs'">API Documentation</button>
+    <button onclick="location.href='/tester'">API Tester</button>
+  </div>
+</body>
+</html>
             `);
         });
 
-        
         app.get('/docs', (req, res) => {
             res.send(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>API Documentation</title>
-                    <style>
-                        body { font-family: Arial; padding: 40px; }
-                        h2 { margin-top: 30px; }
-                    </style>
-                </head>
-                <body>
-                    <h1>BeautyConnect API – Documentation</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Documentation</title>
+  <style>
+    body { font-family: Arial; padding: 40px; }
+    h2 { margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>BeautyConnect API – Documentation</h1>
 
-                    <h2>Users</h2>
-                    <ul>
-                        <li>GET /users</li>
-                        <li>GET /users/:id</li>
-                        <li>POST /users</li>
-                        <li>PUT /users/:id</li>
-                        <li>DELETE /users/:id</li>
-                    </ul>
+  <h2>Users</h2>
+  <ul>
+    <li>GET /users</li>
+    <li>GET /users/:id</li>
+    <li>POST /users</li>
+    <li>PUT /users/:id</li>
+    <li>DELETE /users/:id</li>
+  </ul>
 
-                    <h2>Posts</h2>
-                    <ul>
-                        <li>GET /posts</li>
-                        <li>GET /posts/:id</li>
-                        <li>POST /posts</li>
-                        <li>PUT /posts/:id</li>
-                        <li>DELETE /posts/:id</li>
-                    </ul>
+  <h2>Posts</h2>
+  <ul>
+    <li>GET /posts</li>
+    <li>GET /posts/:id</li>
+    <li>POST /posts</li>
+    <li>PUT /posts/:id</li>
+    <li>DELETE /posts/:id</li>
+  </ul>
 
-                    <h2>Categories</h2>
-                    <ul>
-                        <li>GET /categories</li>
-                        <li>GET /categories/:id</li>
-                        <li>POST /categories</li>
-                        <li>PUT /categories/:id</li>
-                        <li>DELETE /categories/:id</li>
-                        <li>GET /stats</li>
-                    </ul>
+  <h2>Categories</h2>
+  <ul>
+    <li>GET /categories</li>
+    <li>GET /categories/:id</li>
+    <li>POST /categories</li>
+    <li>PUT /categories/:id</li>
+    <li>DELETE /categories/:id</li>
+    <li>GET /stats</li>
+  </ul>
 
-                    <p><a href="/">← Back</a></p>
-                </body>
-                </html>
+  <p><a href="/">← Back</a></p>
+</body>
+</html>
             `);
         });
 
-        
+        // ✅ STAP 1.1 — Verbeterde API Tester (volledig vervangen)
         app.get('/tester', (req, res) => {
             res.send(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>API Tester</title>
-                    <style>
-                        body { font-family: Arial; padding: 40px; }
-                        button { margin: 5px; padding: 10px; }
-                        pre {
-                            background: #eee;
-                            padding: 20px;
-                            margin-top: 20px;
-                            max-height: 400px;
-                            overflow: auto;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>API Tester</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Tester</title>
+  <style>
+    body { font-family: Arial; padding: 40px; }
+    button { margin: 5px; padding: 10px; }
+    pre { background: #eee; padding: 20px; margin-top: 20px; max-height: 400px; overflow: auto; }
+    h2 { margin-top: 30px; }
+  </style>
+</head>
+<body>
 
-                    <button onclick="testApi('/users')">Test Users</button>
-                    <button onclick="testApi('/posts')">Test Posts</button>
-                    <button onclick="testApi('/categories')">Test Categories</button>
+<h1>BeautyConnect API Tester</h1>
 
-                    <pre id="output">Click a button to test the API</pre>
+<h2>Seed demo data</h2>
+<button onclick="seedUsers()">Add demo users</button>
+<button onclick="seedPosts()">Add demo posts</button>
 
-                    <p><a href="/">← Back</a></p>
+<h2>View data</h2>
+<button onclick="fetchApi('/users')">View users</button>
+<button onclick="fetchApi('/posts')">View posts</button>
+<button onclick="fetchApi('/categories')">View categories</button>
 
-                    <script>
-                        function testApi(endpoint) {
-                            fetch(endpoint)
-                                .then(res => res.json())
-                                .then(data => {
-                                    document.getElementById('output').textContent =
-                                        JSON.stringify(data, null, 2);
-                                })
-                                .catch(err => {
-                                    document.getElementById('output').textContent = err;
-                                });
-                        }
-                    </script>
-                </body>
-                </html>
+<h2>Sorting</h2>
+<button onclick="fetchApi('/users?sort=age&order=desc')">Users by age (desc)</button>
+<button onclick="fetchApi('/posts?sort=created_at&order=desc')">Posts newest first</button>
+
+<h2>Stats</h2>
+<button onclick="fetchApi('/stats')">View stats</button>
+
+<h2>Validation test</h2>
+<button onclick="testValidation()">Trigger validation error</button>
+
+<pre id="output">Click a button to test the API</pre>
+
+<p><a href="/">← Back</a></p>
+
+<script>
+function fetchApi(endpoint) {
+  fetch(endpoint)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('output').textContent =
+        JSON.stringify(data, null, 2);
+    });
+}
+
+function seedUsers() {
+  const users = [
+    { firstname: 'Laila', lastname: 'Nounouh', email: 'laila@example.com', age: 22, role: 'admin' },
+    { firstname: 'Mona', lastname: 'Test', email: 'mona@test.com', age: 25, role: 'user' },
+    { firstname: 'Sara', lastname: 'Beauty', email: 'sara@beauty.com', age: 19, role: 'user' }
+  ];
+
+  users.forEach(u => {
+    fetch('/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(u)
+    });
+  });
+
+  document.getElementById('output').textContent = 'Demo users added';
+}
+
+function seedPosts() {
+  const posts = [
+    { title: 'Makeup tips', content: 'Basic makeup tips for beginners', user_id: 1 },
+    { title: 'Skincare routine', content: 'Daily skincare routine explained', user_id: 1 }
+  ];
+
+  posts.forEach(p => {
+    fetch('/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(p)
+    });
+  });
+
+  document.getElementById('output').textContent = 'Demo posts added';
+}
+
+function testValidation() {
+  fetch('/categories', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'makeup123' })
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('output').textContent =
+      JSON.stringify(data, null, 2);
+  });
+}
+</script>
+
+</body>
+</html>
             `);
         });
 
@@ -208,7 +263,7 @@ createTables()
         app.use('/posts', postRoutes);
         app.use('/categories', categoryRoutes);
 
-        // ✅ STAP 2.1 — Stats route
+        // ✅ Stats route
         app.get('/stats', async (req, res) => {
             try {
                 const usersRow = await knex('users').count({ count: '*' }).first();
